@@ -1,14 +1,12 @@
 ﻿using CalendarWebApiService.Helpers;
 using CalendarWebApiService.Models;
 using CalendarWebApiService.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Formatter;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.EntityFrameworkCore;
-using System.Text;
+using Microsoft.Extensions.Options;
 
 namespace CalendarWebApiService.Controllers
 {
@@ -16,12 +14,12 @@ namespace CalendarWebApiService.Controllers
     [ApiController]
     public class NotesController : ODataController
     {
-        private readonly INotesService _notesService;
-        //private readonly IHubContext<NotificationHub> _hubContext;
-        public NotesController(INotesService notesService/*, IHubContext<NotificationHub> hubContext*/)
+        private readonly INotesService _notesService;        
+        private readonly AppSettings? _appSettings;
+        public NotesController(INotesService notesService, IOptionsSnapshot<AppSettings> appSettings)
         {
             _notesService = notesService;
-            //_hubContext = hubContext;
+            _appSettings = appSettings.Value;
         }
         /// <summary>
         /// Получение списка всех заметок
@@ -37,25 +35,11 @@ namespace CalendarWebApiService.Controllers
             }
             else
             {
-                //TODO: вынести в хелпер
-                var csv = new StringBuilder();
-                csv.AppendLine("Id,Title,Text,Date,CreateDate"); // Заголовки
-                foreach (var note in list)
-                {
-                    csv.AppendLine($"{note.Id},{note.Title},{note.Text},{note.Date},{note.CreateDate}");
-                }
-                return File(new UTF8Encoding().GetBytes(csv.ToString()), "text/csv", "notes.csv");
+                return File(CsvHelper<Notes>.CreateCsv(list,_appSettings.Delimeter), _appSettings.CsvHeaderType, _appSettings.CsvFileName);
             }
-            //try
-            //{
-            //    return Ok(_notesService.GetAll());
-            //}
-            //catch (Exception e)
-            //{
-            //    return BadRequest(e.Message);
-            //}
         }
         [HttpPost]
+        [EnableQuery]
         public async Task<IActionResult> Post([FromBody] Notes note)
         {
             if (note == null)
@@ -64,13 +48,11 @@ namespace CalendarWebApiService.Controllers
             }
 
             _notesService.Add(note);
-            //await _hubContext.Clients.All.SendAsync("ReceiveNotification", $"Создана новая заметка: {note.Title}");
-            //NotificationHub notificationHub = new();
-            //await notificationHub.SendNotification($"Создана новая заметка: {note.Title}");
 
             return Created(); 
         }
         [HttpPut("{key}")]
+        [EnableQuery]
         public IActionResult Put([FromODataUri] int key, [FromBody] Notes note)
         {
             //ModelState.IsValid
@@ -99,6 +81,7 @@ namespace CalendarWebApiService.Controllers
         //    return NoContent();
         //}
         [HttpDelete("{key}")]
+        [EnableQuery]
         public IActionResult Delete([FromODataUri] int key)
         {
             bool res = _notesService.Delete(key);

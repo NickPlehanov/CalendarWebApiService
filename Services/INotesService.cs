@@ -6,7 +6,7 @@ namespace CalendarWebApiService.Services
     {
         IEnumerable<Notes> GetAll();
         Notes GetById(int id);
-        IEnumerable<Notes> GetByConditions(object cond);
+        IAsyncEnumerable<Notes> GetNotesReadyToAlarm();
         void Add(Notes entity);
         void Update(int id,Notes entity);
         bool Delete(int id);
