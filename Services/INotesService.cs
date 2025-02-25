@@ -4,11 +4,10 @@ namespace CalendarWebApiService.Services
 {
     public interface INotesService
     {
-        IEnumerable<Notes> GetAll();
-        Notes GetById(int id);
+        Task<IEnumerable<Notes>> GetAll();
         IAsyncEnumerable<Notes> GetNotesReadyToAlarm();
-        void Add(Notes entity);
-        void Update(int id,Notes entity);
-        bool Delete(int id);
+        Task Add(Notes entity);
+        Task Update(int id,Notes entity);
+        Task<bool> Delete(int id);
     }
 }

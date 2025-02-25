@@ -11,7 +11,6 @@ using Microsoft.Extensions.Options;
 namespace CalendarWebApiService.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
     public class NotesController : ODataController
     {
         private readonly INotesService _notesService;        
@@ -27,9 +26,9 @@ namespace CalendarWebApiService.Controllers
         /// <returns>Список заметок</returns>
         [HttpGet]
         [EnableQuery]
-        public ActionResult<IEnumerable<Notes>> GetListNotes([FromODataUri] bool export = false)
+        public async Task<ActionResult<IEnumerable<Notes>>> GetListNotes([FromODataUri] bool export = false)
         {
-            var list = _notesService.GetAll();
+            var list = await _notesService.GetAll();
             if (!export) {
                 return Ok(list);
             }
@@ -47,13 +46,13 @@ namespace CalendarWebApiService.Controllers
                 return BadRequest();
             }
 
-            _notesService.Add(note);
+            await _notesService.Add(note);
 
             return Created(); 
         }
         [HttpPut("{key}")]
         [EnableQuery]
-        public IActionResult Put([FromODataUri] int key, [FromBody] Notes note)
+        public async Task<IActionResult> Put([FromODataUri] int key, [FromBody] Notes note)
         {
             //ModelState.IsValid
             if (note == null)
@@ -61,7 +60,7 @@ namespace CalendarWebApiService.Controllers
                 return BadRequest();
             }
 
-            _notesService.Update(key, note);
+            await _notesService.Update(key, note);
 
             return NoContent();
         }
@@ -82,9 +81,9 @@ namespace CalendarWebApiService.Controllers
         //}
         [HttpDelete("{key}")]
         [EnableQuery]
-        public IActionResult Delete([FromODataUri] int key)
+        public async Task<IActionResult> DeleteAsync([FromODataUri] int key)
         {
-            bool res = _notesService.Delete(key);
+            bool res = await _notesService.Delete(key);
 
             return res ? NoContent() : NotFound(key);
         }

@@ -1,6 +1,7 @@
 ﻿
 
 using CalendarWebApiService.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace CalendarWebApiService.Services
 {
@@ -11,38 +12,32 @@ namespace CalendarWebApiService.Services
         {
             _context = context;
         }
-        public void Add(T entity)
+        public async Task Add(T entity)
         {
-            _context.Set<T>().Add(entity);
-            _context.SaveChanges();
+            await _context.Set<T>().AddAsync(entity);
+            await _context.SaveChangesAsync();
         }
 
-        public void Delete(int id)
+        public async Task Delete(int id)
         {
-            _context.Set<T>().Remove(GetById(id));
-            _context.SaveChanges();
+            _context.Set<T>().Remove(await GetById(id));
+            await _context.SaveChangesAsync();
         }
 
-        public IEnumerable<T> GetAll()
+        public async Task<IEnumerable<T>> GetAll()
         {
-            return _context.Set<T>().AsEnumerable();
+            return await _context.Set<T>().ToListAsync();
         }
 
-        public IEnumerable<T> GetByConditions(object cond)
+        public async Task<T?> GetById(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Set<T>().FindAsync(id);
         }
 
-        public T GetById(int id)
+        public async Task Update(int id,T entity)
         {
-            return _context.Set<T>().Find(id);
-        }
-
-        public void Update(int id,T entity)
-        {
-            //_context.Set<T>().Entry(entity).P
-            _context.Entry<T>(GetById(id)).CurrentValues.SetValues(entity);
-            _context.SaveChanges();
+            _context.Entry<T>(await GetById(id))?.CurrentValues.SetValues(entity);
+            await _context.SaveChangesAsync();
         }
     }
 }

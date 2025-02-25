@@ -12,45 +12,42 @@ namespace CalendarWebApiService.Services
             _iNotesRepository = repository;
             _appSettings = appSettings.Value;
         }
-        public void Add(Notes entity)
+        public async Task Add(Notes entity)
         {
-            _iNotesRepository.Add(entity);
+            await _iNotesRepository.Add(entity);
         }
 
-        public bool Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            Notes nts = _iNotesRepository.GetById(id);
+            Notes nts = await _iNotesRepository.GetById(id);
             if (nts == null)
                 return false;
 
-            _iNotesRepository.Delete(id);
+            await _iNotesRepository.Delete(id);
             return true;
         }
 
-        public IEnumerable<Notes> GetAll()
+        public async Task<IEnumerable<Notes>> GetAll()
         {
-            return _iNotesRepository.GetAll();
+            return await _iNotesRepository.GetAll();
         }
 
         public async IAsyncEnumerable<Notes> GetNotesReadyToAlarm()
         {
             var StartDate = DateTime.Now.AddSeconds(_appSettings.QueryPeriodForAlarm * (-1));
             var EndDate = DateTime.Now.AddSeconds(_appSettings.QueryPeriodForAlarm);
-            foreach (var item in _iNotesRepository.GetAll().Where(x => x.Date >=StartDate && x.Date<=EndDate))
+            var list = await _iNotesRepository.GetAll();
+            foreach (var item in list)
             {
+                if(item.Date>=StartDate && item.Date <= EndDate)
                 yield return item;
             }
         }
 
-        public Notes GetById(int id)
+        public async Task Update(int id,Notes entity)
         {
-            throw new NotImplementedException();
-        }
-
-        public void Update(int id,Notes entity)
-        {
-            Notes note = _iNotesRepository.GetById(id);
-            _iNotesRepository.Update(id,entity);
+            Notes note = await _iNotesRepository.GetById(id);
+            await _iNotesRepository.Update(id,entity);
         }
     }
 }

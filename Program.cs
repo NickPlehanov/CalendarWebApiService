@@ -12,10 +12,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers(x => { x.Conventions.Add(new IgnoreODataControllersConvention()); }).AddOData((opt) =>
 {
-    opt.AddRouteComponents("odata", GetEdmModel())
+    opt.AddRouteComponents("", GetEdmModel())
         .EnableQueryFeatures();
 }); ;
-builder.Services.AddEndpointsApiExplorer();
+//builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(x =>
 {
     x.OperationFilter<ODataQueryParametersFilter>();

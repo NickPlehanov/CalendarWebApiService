@@ -2,11 +2,10 @@
 {
     public interface IRepository<T> where T : class
     {
-        IEnumerable<T> GetAll();
-        T GetById(int id);
-        IEnumerable<T> GetByConditions(object cond);
-        void Add(T entity);
-        void Update(int id,T entity);
-        void Delete(int id);
+        Task<IEnumerable<T>> GetAll();
+        Task<T?> GetById(int id);
+        Task Add(T entity);
+        Task Update(int id,T entity);
+        Task Delete(int id);
     }
 }
