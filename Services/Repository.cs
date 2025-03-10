@@ -36,8 +36,14 @@ namespace CalendarWebApiService.Services
 
         public async Task Update(int id,T entity)
         {
-            _context.Entry<T>(await GetById(id))?.CurrentValues.SetValues(entity);
-            await _context.SaveChangesAsync();
+            var _entity = await GetById(id);
+            if (_entity != null)
+            {
+                _context.Entry<T>(_entity)?.CurrentValues.SetValues(entity);
+                await _context.SaveChangesAsync();
+            }
+            else
+                return;
         }
     }
 }

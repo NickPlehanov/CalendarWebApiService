@@ -31,6 +31,10 @@ namespace CalendarWebApiService.Services
         {
             return await _iNotesRepository.GetAll();
         }
+        public async Task<Notes> GetById(int id)
+        {
+            return await _iNotesRepository.GetById(id);
+        }
 
         public async IAsyncEnumerable<Notes> GetNotesReadyToAlarm()
         {

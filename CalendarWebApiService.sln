@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35527.113 d17.12
+VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalendarWebApiService", "CalendarWebApiService.csproj", "{2B1693D9-C896-4225-840B-8304104F57F9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject", "..\TestProject\TestProject.csproj", "{19722939-384D-4752-86A9-53CB67D3278F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{2B1693D9-C896-4225-840B-8304104F57F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2B1693D9-C896-4225-840B-8304104F57F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2B1693D9-C896-4225-840B-8304104F57F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19722939-384D-4752-86A9-53CB67D3278F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19722939-384D-4752-86A9-53CB67D3278F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19722939-384D-4752-86A9-53CB67D3278F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19722939-384D-4752-86A9-53CB67D3278F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

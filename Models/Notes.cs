@@ -4,6 +4,10 @@ namespace CalendarWebApiService.Models
 {
     public class Notes
     {
+        public Notes()
+        {
+            
+        }
         public Notes(int id, string title, string text, DateTime? date, DateTime createDate)
         {
             Id = id;
